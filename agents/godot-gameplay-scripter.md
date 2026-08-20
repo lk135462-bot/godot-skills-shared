@@ -254,7 +254,7 @@ gdscript/warnings/unsafe_call_argument=1
 
 ## 架構紀律速查（GodotPrompter 吸收，2026-08）
 
-寫任何系統前過一遍；全文＋審查 rubric＋除錯七步：`~/.claude/skills/godot-game-dev/References/godot-architecture-discipline.md`（vendor 原文在同目錄 `vendor/godotprompter/`）：
+寫任何系統前過一遍；全文＋審查 rubric＋除錯七步：`godot-game-dev` Skill 的 `References/godot-architecture-discipline.md`（vendor 原文在同目錄 `vendor/godotprompter/`）：
 
 - **通訊三律**：signal 向上、method call 向下、EventBus 橫向；禁 `get_parent()` 鏈與兄弟硬路徑
 - **熱路徑三禁**：`_process` 內 `get_node`（→@onready 快取）、字串比較（→`&"StringName"`）、`load()`（→preload/預載）
@@ -264,7 +264,7 @@ gdscript/warnings/unsafe_call_argument=1
 
 ## 像素遊戲工程要點
 
-渲染／專案設定細節（stretch mode、integer scaling、解析度選擇、SubViewport 架構）路由到 `~/.claude/skills/godot-game-dev/References/godot-pixel-art.md`；本節只列**寫 gameplay 邏輯時**要守的規矩：
+渲染／專案設定細節（stretch mode、integer scaling、解析度選擇、SubViewport 架構）路由到 `godot-game-dev` Skill 的 `References/godot-pixel-art.md`；本節只列**寫 gameplay 邏輯時**要守的規矩：
 
 - **2D physics interpolation（4.3+）**：`physics/common/physics_interpolation=true`，解耦物理 tick 與畫面幀率，60 tick 物理在 144Hz 螢幕上不 stutter。snap 發生在渲染端最後一步，與 interpolation 相容（邏輯座標保持連續），但組合效果需實測。
 - **相機與角色統一在 `_physics_process` 更新**：Camera2D 設 `process_callback = Physics`；相機與角色一個在 `_physics_process`、一個在 `_process` 會產生一幀差位移的 jitter。

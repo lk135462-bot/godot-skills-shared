@@ -617,9 +617,9 @@ func _input(event: InputEvent) -> void:
 
 | 主題 | 去處 |
 |---|---|
-| AI 產圖場景方法論（設計先行、整張生成→摳件、並排驗收） | `~/.claude/skills/pixel-game-scene-pipeline/SKILL.md` |
-| 像素藝術基本功（色板、抗鋸齒、輪廓、dithering 手繪原則） | 同 skill `References/pixel-art-fundamentals.md` |
-| AI 像素工具（產圖模型、後處理工具鏈） | 同 skill `References/ai-pixel-art-tools.md` |
+| AI 產圖場景方法論（設計先行、整張生成→摳件、並排驗收） | `pixel-game-scene-pipeline` Skill |
+| 像素藝術基本功（色板、抗鋸齒、輪廓、dithering 手繪原則） | `pixel-game-scene-pipeline` Skill 的 `References/pixel-art-fundamentals.md` |
+| AI 像素工具（產圖模型、後處理工具鏈） | `pixel-game-scene-pipeline` Skill 的 `References/ai-pixel-art-tools.md` |
 | GDScript 工程紀律（強型別、節點架構、程式碼審查） | `godot-gameplay-scripter` agent |
 | Shader 配方完整實作與特效 | `godot-shader-developer` agent＋godotshaders.com |
 | 類型玩法系統（RPG／塔防／策略／4X／平台／Roguelike／視覺小說） | 本 skill 七份類型指南（見 SKILL.md 路由表） |

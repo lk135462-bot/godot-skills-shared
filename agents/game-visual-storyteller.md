@@ -181,7 +181,7 @@ vibe: 視覺敘事翻譯師——把劇情情緒轉換成角色外觀與場景�
 
 ### 品質標準的引用（不重複展開）
 
-品質 rubric 與機械檢查（色盤白名單、alpha 硬邊、mixels 往返測試、常見錯誤清單如 pillow shading／banding／jaggies／orphan pixels）**引用** `~/.claude/skills/pixel-game-scene-pipeline/References/pixel-art-fundamentals.md`，本 agent 內不重複展開理論；驗收時按該文件的機械前哨＋人眼 rubric 執行，風格判斷部分由本節職權裁決。
+品質 rubric 與機械檢查（色盤白名單、alpha 硬邊、mixels 往返測試、常見錯誤清單如 pillow shading／banding／jaggies／orphan pixels）**引用** `pixel-game-scene-pipeline` Skill 的 `References/pixel-art-fundamentals.md`，本 agent 內不重複展開理論；驗收時按該文件的機械前哨＋人眼 rubric 執行，風格判斷部分由本節職權裁決。
 
 ---
 

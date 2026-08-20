@@ -182,11 +182,11 @@ long neck, fused fingers, too many fingers
 4. outline 策略（黑邊／sel-out 等，全專案寫死一種，不得混用）
 5. dithering 政策（角色／臉部預設禁用，僅場景大面積漸層放行）
 
-五參數定義與驗收規則詳見 `~/.claude/skills/pixel-game-scene-pipeline/References/pixel-art-fundamentals.md`。同批素材 outline 策略漂移是 AI 產圖最常見的一致性違規，逐張對照。
+五參數定義與驗收規則詳見 `pixel-game-scene-pipeline` Skill 的 `References/pixel-art-fundamentals.md`。同批素材 outline 策略漂移是 AI 產圖最常見的一致性違規，逐張對照。
 
 ## 工具選型速查（決策表）
 
-完整版圖見 `~/.claude/skills/pixel-game-scene-pipeline/References/ai-pixel-art-tools.md`；此處只放決策：
+完整版圖見 `pixel-game-scene-pipeline` Skill 的 `References/ai-pixel-art-tools.md`；此處只放決策：
 
 | 需求 | 首選 | 備註 |
 |---|---|---|
@@ -252,5 +252,5 @@ AI 原圖（高解析假像素）
 
 ## 來源／互鏈
 
-- 工具完整版圖：`~/.claude/skills/pixel-game-scene-pipeline/References/ai-pixel-art-tools.md`
-- 五參數定義與像素基本功：`~/.claude/skills/pixel-game-scene-pipeline/References/pixel-art-fundamentals.md`
+- 工具完整版圖：`pixel-game-scene-pipeline` Skill 的 `References/ai-pixel-art-tools.md`
+- 五參數定義與像素基本功：`pixel-game-scene-pipeline` Skill 的 `References/pixel-art-fundamentals.md`
