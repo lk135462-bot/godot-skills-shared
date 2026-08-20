@@ -1,0 +1,13 @@
+# Claude Code 逐 Skill 本機狀態
+*/Memory/
+*/Memory/**
+
+# 輸出/快取
+*/Output/
+*/Reports/
+__pycache__/
+*.pyc
+
+# 編輯器
+.DS_Store
+Thumbs.db
