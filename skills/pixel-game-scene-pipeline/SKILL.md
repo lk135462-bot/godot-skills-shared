@@ -1,6 +1,6 @@
 ---
 name: pixel-game-scene-pipeline
-description: 像素遊戲場景開發管線——從空間設計、AI 產圖到引擎落地的完整方法論（沉澱自一個像素等角宿舍模擬專案的兩輪全程實戰）。當使用者要「製作像素遊戲」「像素遊戲場景」「場景美術管線」「等角剖面場景」「AI 產遊戲場景」「遊戲場景怎麼生成」「場景圖接進 Godot」「互動件摳圖」「場景光影不統一」「貼紙感」「先設計再產圖」「設計簡報確認」「平面圖轉等角」「門片畫錯／門要能開關」「場景 relight shader」「遊戲一鍵驗收」「桌寵 UX 稽核」「改一處整張重擲／構圖鎖」「延伸既有美術系列」「追溯原提示詞／生成參數／後處理」「像素基本功／調色盤紀律」「AI 像素產圖工具選型」「TileMap／tile 場景」「像素渲染設定」時觸發。涵蓋：設計先行（設計包→原生簡報對齊→定案才產圖）＋既有系列生成譜系優先（原配方參數化複用）＋尺度基準與等角化轉換＋場景管線決策樹（整張全生成→摳互動件→引擎疊層 vs 離散 sprite）＋門策略（底圖只畫開口、離散件疊層）＋並排比對驗收基準＋九條鐵則（含單點迭代構圖鎖）＋工具腳本行為契約＋Godot 引擎模式（含 shader 光影分工、一鍵驗收回歸地板）＋專職 agent 路由與多 agent 檔案鎖＋UX 情境稽核。
+description: 像素遊戲場景開發管線——從空間設計、AI 產圖到引擎落地的完整方法論（沉澱自一個像素等角宿舍模擬專案的兩輪全程實戰）。當使用者要「製作像素遊戲」「像素遊戲場景」「場景美術管線」「等角剖面場景」「AI 產遊戲場景」「遊戲場景怎麼生成」「場景圖接進 Godot」「互動件摳圖」「場景光影不統一」「貼紙感」「先設計再產圖」「設計簡報確認」「平面圖轉等角」「門片畫錯／門要能開關」「場景 relight shader」「遊戲一鍵驗收」「桌寵 UX 稽核」「改一處整張重擲／構圖鎖」「延伸既有美術系列」「追溯原提示詞／生成參數／後處理」「像素基本功／調色盤紀律」「AI 像素產圖工具選型」「TileMap／tile 場景」「像素渲染設定」時觸發。涵蓋：設計先行（設計包→原生簡報對齊→定案才產圖）＋既有系列生成譜系優先（原配方參數化複用）＋尺度基準與等角化轉換＋場景管線決策樹（整張全生成→摳互動件→引擎疊層 vs 離散 sprite）＋門策略（底圖只畫開口、離散件疊層）＋並排比對驗收基準＋九條鐵則（含單點迭代構圖鎖）＋3 支可直接跑的工具腳本（摳互動件／去背／無縫 tile）＋其餘行為契約＋Godot 引擎模式（含 shader 光影分工、一鍵驗收回歸地板）＋專職 agent 路由與多 agent 檔案鎖＋UX 情境稽核。
 ---
 
 # 像素遊戲場景開發管線（Pixel Game Scene Pipeline）
@@ -103,7 +103,7 @@ description: 像素遊戲場景開發管線——從空間設計、AI 產圖到�
 2. **原位摳互動件**：用 `cut_iso_objects.py` 依多邊形 spec 從底圖**原位**摳出互動件 → `objects_iso/*.png` ＋ `anchors.json`（記錄每件的底圖座標）。互動件＝「疊在原位的複本」——底圖上物件仍在，引擎在 anchor 座標蓋上互動件或其差分即可。摳圖鐵則：多邊形完整包住物件（絕不切進本體）、不含入其他互動件；可含少量貼邊背景像素（原位貼回像素恆等）。
 3. **機械自檢 diff=0**：每件按 anchor 貼回底圖，逐像素 diff **必須為 0**（`cut_iso_objects.py check`）。這是整條管線的正確性錨——diff=0 保證「摳出來的就是原圖那塊」，之後任何差分（燈亮/燈暗/使用中）只改物件像素、背景原樣。
 4. **引擎疊層**：底圖鋪底 → 互動件按 anchors 疊回 → 角色 sprite 按 y 座標 z-sort（painter's algorithm）插入層間 → 差分/狀態換圖只換互動件那層。
-5. **底圖外擴不動本體**：底圖要改尺寸（如滿版外擴）時，原圖最後**整張貼回**新畫布 → 裁回 diff=0 天生保證；記錄 offset（如 x=+115），anchors 全體平移即可沿用（`make_public_floor_wide.py` 範式）。
+5. **底圖外擴不動本體**：底圖要改尺寸（如滿版外擴）時，原圖最後**整張貼回**新畫布 → 裁回 diff=0 天生保證；記錄 offset，anchors 全體平移即可沿用（外擴範式規格見 §4）。
 
 ### 互動房間例外：高接觸生活物件走 object-layer，不用整圖硬補
 
@@ -161,18 +161,22 @@ description: 像素遊戲場景開發管線——從空間設計、AI 產圖到�
 
 ---
 
-## §4 工具鏈（管線需要的六支腳本，規格如下）
+## §4 工具鏈
 
-> 以下是本管線實際跑起來所需的腳本規格。專案內自行實作即可——**重點是每支腳本的「要點」欄，那是踩過坑後才定下來的行為契約**。
+> **前三支有現成程式碼**在 `Scripts/`（CLI 參數化、跨平台、已實測），`pip install pillow numpy scipy` 後直接可跑，用法見 `Scripts/README.md`。
+> 其餘幾支只給規格——它們高度綁定原專案（畫布尺寸、實測調色盤、特定 CLI 工具），**方法可複用、程式碼不能**。
+> 自行實作時**重點看「要點」欄，那是踩過坑後才定下來的行為契約**。
+
+> ✅＝`Scripts/` 內附程式碼可直接跑　📋＝只有規格，需自行實作
 
 | 腳本 | 用途 | 要點 |
 |---|---|---|
-| `cut_iso_objects.py` | 從整層底圖**原位摳互動件**，三模式：`cut`（依 polygon spec 摳圖→PNG＋anchors.json）／`verify`（產描邊疊圖＋棋盤格驗證圖）／`check`（每件貼回底圖 diff 必須=0 的機械自檢） | 本管線核心；spec 為 `cut_spec.json`（source＋每件 polygon），座標一律底圖原座標系 |
-| `make_public_floor_wide.py` | 底圖滿版**外擴**範式：左右各延伸屋外環境（漸層＋星點＋程序化剪影，調色盤實測自原圖）＋24px 接縫羽化；**原圖最後整張貼回→裁回 diff=0 腳本內 assert** | 改尺寸不動本體的範本；輸出附 offset 供 anchors 平移 |
-| `key_object.py` | **單色 key 底（如 #FF00FF／#00FF00）單物件去背**成透明 PNG：de-blend＋despill→去雜點（保留多連通域，支援多件式物件）→貼齊內容邊界裁切（底列=接地線），輸出原生比例 RGBA | 給離散物件路線用；不套人物固定畫布、不做高度正規化 |
-| `art_dispatcher.py` | 產圖批次調度器：本進程親自 spawn 子進程（exit code＝死活，不用猜）＋台帳單一寫者防重複發包＋額度上限**熔斷**停發、留 resume 點重跑即續 | 根治「背景任務死活不明→誤判重發→雙倍燒額度」；批量產圖一律經此，不手發 |
-| `make_tile.py` | 滿版材質→**無縫平鋪 tile**：梯度修正法（邊差沿全幅線性攤平，只加低頻修正、保留原始紋理，無鬼影/無對角干涉）＋`--test` 出 NxN 平鋪圖目視驗縫 | 地板/牆面鋪面用；不去背不裁切 |
-| `References/vendor-sprite-forge/generate2dsprite/scripts/generate2dsprite.py` | 多幀 sheet **確定性處理器**（MIT vendor）：去背→固定格切→feet-anchor 對齊（98 百分位腳線）→`fit`/`preserve` 縮放→QC 統計→Godot sprite3d/bundle JSON 合約 | ⚠ key 色寫死洋紅 #FF00FF——若你的產線用別的 key 色（如綠幕 #00FF00）需改參數或改用自家 `key_object.py`；同目錄 `make_anchor_layout.py`（錨定模板產生器）、`../generate2dmap/scripts/`（prop pack 抽取／terrain 切片） |
+| ✅ `cut_iso_objects.py` | 從整層底圖**原位摳互動件**，三模式：`cut`（依 polygon spec 摳圖→PNG＋anchors.json）／`verify`（產描邊疊圖＋棋盤格驗證圖）／`check`（每件貼回底圖 diff 必須=0 的機械自檢） | 本管線核心；spec 為 `cut_spec.json`（source＋每件 polygon），座標一律底圖原座標系 |
+| 📋 `make_public_floor_wide.py` | 底圖滿版**外擴**範式：左右各延伸屋外環境（漸層＋星點＋程序化剪影，調色盤實測自原圖）＋24px 接縫羽化；**原圖最後整張貼回→裁回 diff=0 腳本內 assert** | 改尺寸不動本體的範本；輸出附 offset 供 anchors 平移 |
+| ✅ `key_object.py` | **單色 key 底（如 #FF00FF／#00FF00）單物件去背**成透明 PNG：de-blend＋despill→去雜點（保留多連通域，支援多件式物件）→貼齊內容邊界裁切（底列=接地線），輸出原生比例 RGBA | 給離散物件路線用；不套人物固定畫布、不做高度正規化 |
+| 📋 `art_dispatcher.py` | 產圖批次調度器：本進程親自 spawn 子進程（exit code＝死活，不用猜）＋台帳單一寫者防重複發包＋額度上限**熔斷**停發、留 resume 點重跑即續 | 根治「背景任務死活不明→誤判重發→雙倍燒額度」；批量產圖一律經此，不手發 |
+| ✅ `make_tile.py` | 滿版材質→**無縫平鋪 tile**：梯度修正法（邊差沿全幅線性攤平，只加低頻修正、保留原始紋理，無鬼影／無對角干涉）＋`--test` 出 NxN 平鋪圖目視驗縫 | 地板／牆面鋪面用；不去背不裁切。**兩個易錯點**：①修正量取「右−左」，寫反會把接縫放大 1.5 倍 ②**先縮放再做無縫**——LANCZOS 取樣核不繞回對邊，順序顛倒縮完邊緣又對不上 |
+| ✅ `References/vendor-sprite-forge/generate2dsprite/scripts/generate2dsprite.py` | 多幀 sheet **確定性處理器**（MIT vendor）：去背→固定格切→feet-anchor 對齊（98 百分位腳線）→`fit`/`preserve` 縮放→QC 統計→Godot sprite3d/bundle JSON 合約 | ⚠ key 色寫死洋紅 #FF00FF——若你的產線用別的 key 色（如綠幕 #00FF00）需改參數或改用自家 `key_object.py`；同目錄 `make_anchor_layout.py`（錨定模板產生器）、`../generate2dmap/scripts/`（prop pack 抽取／terrain 切片） |
 
 ---
 
@@ -212,7 +216,7 @@ description: 像素遊戲場景開發管線——從空間設計、AI 產圖到�
 | 資產進引擎（匯入／打包／動畫設定） | `game-technical-artist` |
 | 空間鄰接／動線設計 | `level-designer` |
 | 風格／氛圍／視覺敘事 | `game-visual-storyteller` |
-| 批量產圖調度 | 產圖調度 agent（走 §4 `art_dispatcher.py`，不手發） |
+| 批量產圖調度 | 產圖調度 agent（走 §4 的 dispatcher 規格，不手發） |
 | 驗收自動化（一鍵驗收腳本／回歸） | 照 `godot-game-dev` 的 `References/godot-verification-toolchain.md` 自建；有 E2E 測試 agent 就派它 |
 | 觸控／UI 稽核 | 照本 Skill §7 的情境校準法逐項過；有 UI/UX 稽核 agent 就派它，校準尺仍用 §7 |
 | 程式審查 | 照 `godot-game-dev` 的 `References/godot-architecture-discipline.md` §4 審查要點＋`vendor/godotprompter/godot-code-review.md` 八區審查表；有程式審查 agent 就派它 |
