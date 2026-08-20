@@ -199,7 +199,7 @@ description: 像素遊戲場景開發管線——從空間設計、AI 產圖到�
 | **設計 agent**（game-visual-storyteller 等） | 出**座標級**空間/版面規格（哪面牆、幾 px、什麼關係） | 工程師不自切格局（自切 2×2 均分被打回）；給設計 agent 痛點＋約束＋尺寸 |
 | **執行 agent 工單** | 照規格執行（程式／產圖） | 六元素合約（目標／範疇／輸入／輸出／驗收／邊界）；**邊界節明列「不可改的既有常數／命名」**（曾被悄改角色名） |
 | **終審** | **親跑**驗收指令（headless parse、diff 自檢、截圖並排比對），不信 agent 自述 | 審核層永不外包 |
-| **critic 定期掃** | 連續多輪工單後掃**迭代殘留**：死碼堆積（曾清 17 函式 239 行）、被悄改的既有值、`_legacy` 垃圾 | 多輪迭代必排，不等出事 |
+| **定期殘留掃描** | 連續多輪工單後掃**迭代殘留**：死碼堆積（曾一次清掉 17 個函式 239 行）、被悄改的既有值、`_legacy` 垃圾 | 多輪迭代必排，不等出事 |
 
 另：實作前**重讀自己的規格**、每輪完成對照 spec 問「照構想延伸了嗎」——**規格寫了卻零碎實作**是這條管線最貴的流程教訓；專案開工即建 WORKLOG（一次工作一則）。
 
@@ -213,9 +213,9 @@ description: 像素遊戲場景開發管線——從空間設計、AI 產圖到�
 | 空間鄰接／動線設計 | `level-designer` |
 | 風格／氛圍／視覺敘事 | `game-visual-storyteller` |
 | 批量產圖調度 | 產圖調度 agent（走 §4 `art_dispatcher.py`，不手發） |
-| 驗收自動化（一鍵驗收腳本／回歸） | `e2e-testing-engineer` |
-| 觸控／UI 稽核 | `ui-ux-reviewer`（校準法見 §7） |
-| 程式審查 | `critic` |
+| 驗收自動化（一鍵驗收腳本／回歸） | 照 `godot-game-dev` 的 `References/godot-verification-toolchain.md` 自建；有 E2E 測試 agent 就派它 |
+| 觸控／UI 稽核 | 照本 Skill §7 的情境校準法逐項過；有 UI/UX 稽核 agent 就派它，校準尺仍用 §7 |
+| 程式審查 | 照 `godot-game-dev` 的 `References/godot-architecture-discipline.md` §4 審查要點＋`vendor/godotprompter/godot-code-review.md` 八區審查表；有程式審查 agent 就派它 |
 
 ### 多 agent 並行的檔案鎖紀律
 

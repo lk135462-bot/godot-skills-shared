@@ -75,12 +75,35 @@ Skills 與 Agents 分別放進 Claude Code 的設定目錄即可。
 @game-designer 這個抽卡機率曲線合理嗎
 ```
 
-### 建議的起手式
+### 做第一個遊戲：從零到能玩的順序
 
-1. **先確認遊戲類型** → `godot-game-dev/SKILL.md` 的路由表指到對應指南。**不要一次載入全部 7 份**（單份就 800–2,000 行）。
-2. **像素風專案**必讀 `References/godot-pixel-art.md`，與類型指南並用（類型指南管系統架構，它管像素呈現層）。
-3. **開專案第一天**就把 `References/godot-verification-toolchain.md` 的 headless 驗收鏈建起來——不要等出事才補。
-4. **要用 AI 產場景圖**才需要 `pixel-game-scene-pipeline`；純手繪／純程式美術可略過。
+假設你要做一個 2D 遊戲，實際會這樣走。每一步後面是「去讀哪份／叫哪支」：
+
+| # | 做什麼 | 用什麼 | 為什麼是這個順序 |
+|---|---|---|---|
+| 1 | **決定類型** | `godot-game-dev/SKILL.md` 路由表 | 類型決定架構。RPG 的屬性系統和塔防的波次系統長得完全不一樣，**架構選錯重構成本極高** |
+| 2 | **設計玩法**（機制／數值／成長迴圈） | `@game-designer` → 產出 `GAME_FLOW.md` | 觸及 3+ 系統的功能一定要先有設計文件。跳過這步＝一步一試錯 |
+| 3 | **建專案骨架** | `References/godot-architecture-discipline.md` §6 專案設置＋§2 場景組織 | Autoload 慣例、`.gitignore`／`.gitattributes`、目錄結構，一開始定好比之後搬便宜 |
+| 4 | **架好驗收鏈** | `References/godot-verification-toolchain.md` 第一軌 | **這步最常被跳過也最痛**。`--headless --check-only` 等於 GDScript 的 lint，第一天就要能一行指令知道專案有沒有壞 |
+| 5 | **寫核心系統** | 類型指南（如 `godot-tower-defense.md`）＋`@godot-gameplay-scripter` | 指南裡是完整可抄的 GDScript 4.x 模式，不是虛的原則 |
+| 6 | **關卡／地圖** | `@level-designer`＋類型指南的地圖章節 | 讓地形服務機制，不是先畫好看再想玩法 |
+| 7 | **美術進引擎** | `@game-technical-artist`；像素風加讀 `References/godot-pixel-art.md` | 匯入參數（`filter=Nearest`、stretch mode）錯了畫面就是糊的，這層獨立於玩法 |
+| 8 | **特效／shader** | `@godot-shader-developer` | 60fps 優先於好看 |
+| 9 | **音效／BGM** | `@game-audio-engineer` | Godot 4.3+ 有內建互動式音樂節點，不必自己寫狀態機 |
+| 10 | **劇情／對話** | `@narrative-designer` | 有敘事需求才走 |
+
+**橫切面，隨時可能用到：**
+
+- 手寫或請 AI 代寫 `.tscn`／`.tres` 之前 → **一定先讀** `References/godot-file-format-safety.md`。
+  資源檔是嚴格序列化格式不是程式語言，把 GDScript 語法寫進去是 LLM 編輯 Godot 專案最高頻的失敗。
+- 卡住 debug → `References/godot-architecture-discipline.md` §5 除錯七步法。
+- 要用 AI 產場景圖 → 才需要 `pixel-game-scene-pipeline`。純手繪或純程式美術可以完全略過這個 Skill。
+
+### 兩個最容易踩的坑（先講在前面）
+
+1. **不要一次載入全部 7 份類型指南**——單份就 800–2,000 行，一次全塞會把上下文吃光。按類型讀一份。
+2. **`godot --headless` 的 exit code 不可信**——出錯常常還是回傳 0。必須逐行掃 log 抓 `ERROR:`／`SCRIPT ERROR:`。
+   這條寫在 `godot-verification-toolchain.md`，是整包裡最該先知道的一件事。
 
 ---
 
@@ -104,8 +127,8 @@ Skills 與 Agents 分別放進 Claude Code 的設定目錄即可。
 ## 邊界（這包做不到什麼）
 
 - **不含美術資產**，也不含任何遊戲專案原始碼——只有方法論與實作模式
-- **不含通用型 agent**：`pixel-game-scene-pipeline` §6 的路由表提到 `e2e-testing-engineer`／`ui-ux-reviewer`／`critic`，
-  這三個不是 Godot 專屬所以未隨附，自建或以人工 review 替代即可
+- **不含通用型 agent**（測試／UI 稽核／程式審查）：這三類不是 Godot 專屬所以未隨附。
+  相關路由表已改成指向包內對應章節，**照章節走即可，不需要額外 agent**；你若已有這類 agent，派它時仍用包內的標準當尺
 - **不含 Unreal 相關**（原始收藏中有，但與本包主題無關）
 - `pixel-game-scene-pipeline` §4 列的工具腳本是**行為契約規格**，不是現成程式碼——
   請照該節「要點」欄自行實作（那一欄才是踩過坑後定下來的部分）

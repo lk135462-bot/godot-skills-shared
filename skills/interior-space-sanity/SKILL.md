@@ -17,7 +17,7 @@ AI 影像模型（Midjourney／SDXL／GPT 產圖／Nano Banana…）**沒有 3D 
 2. **產後**：圖生成出來後、交付／採用前 → 用「§3 產後審圖檢查表」逐項驗，任何一項不過就用 §5 修正措辭重生成。
 3. **審圖**：使用者拿現成 AI 室內圖來問「哪裡不合理」→ 直接跑 §3＋對照 §4 圖鑑回報。
 
-與 `video-prompt-engineer`（影片動態）、`sprite-prompt-engineer`（角色立繪）互補：**凡場景含室內格局，本 Skill 先過**。
+與角色立繪 prompt（`sprite-prompt-engineer`）、影片動態 prompt 互補：**凡場景含室內格局，本 Skill 先過**。
 
 ---
 
